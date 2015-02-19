@@ -1,4 +1,5 @@
 """ Hello I am a header Comment"""
+"""Run from terminal not in Sublime or sublime breaks"""
 
 import random
 from PIL import Image
@@ -51,7 +52,7 @@ def evaluate_random_function(f, x, y):
     #print 'x'
     #print y,
     #print 'y'
-
+    
     if f == ["xend"]:
         #print 'xended'
         return x
@@ -60,13 +61,13 @@ def evaluate_random_function(f, x, y):
         #print 'yended'
         return y
     else:
-        insidefunc = f.pop(0)
+        insidefunc = f[0]
         #print insidefunc,
         #print 'insidefunc'
-        a = evaluate_random_function(f.pop(0), x, y)
+        a = evaluate_random_function(f[1], x, y)
         #print a,
         #print 'a'
-        b = evaluate_random_function(f.pop(0), x, y)
+        b = evaluate_random_function(f[2], x, y)
         #print b,
         #print 'b'
 
@@ -167,9 +168,13 @@ def generate_art(filename, x_size=350, y_size=350):
     red_function = build_random_function(7, 9)
     green_function = build_random_function(7, 9)
     blue_function = build_random_function(7, 9)
+    #evaluate_random_function(red_function, -1, -1)
+    #evaluate_random_function(green_function, -1, -1)
+    #evaluate_random_function(blue_function, -1, -1)
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
     pixels = im.load()
+    
     for i in range(x_size):
         for j in range(y_size):
             x = remap_interval(i, 0, x_size, -1, 1)
@@ -179,7 +184,7 @@ def generate_art(filename, x_size=350, y_size=350):
                     color_map(evaluate_random_function(green_function, x, y)),
                     color_map(evaluate_random_function(blue_function, x, y))
                     )
-
+    
     im.save(filename)
 
 
@@ -196,5 +201,5 @@ if __name__ == '__main__':
     # TODO: Comment or remove this function call after testing PIL install
     # test_image("noise.png")
 #m = build_random_function(7, 9)
-#print evaluate_random_function(m, -1, -1),
+#print evaluate_random_function(m, -1.0, -.9849234),
 #print 'answer'
