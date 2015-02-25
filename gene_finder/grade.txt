@@ -1,0 +1,5 @@
+Functionality: 5/5
+Documentation: 5/5
+Style: 4.5/5, saw some bits of code that were more complex than they needed to be, and the usage of pop when unnessecary can really bite you in the butt, like we found out when debugging your recursive art project.
+
+Really nice job overall! 
