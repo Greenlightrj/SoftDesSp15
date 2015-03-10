@@ -184,7 +184,7 @@ def generate_art(filename, x_size=350, y_size=350):
                     color_map(evaluate_random_function(green_function, x, y)),
                     color_map(evaluate_random_function(blue_function, x, y))
                     )
-    
+
     im.save(filename)
 
 
@@ -195,7 +195,7 @@ if __name__ == '__main__':
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
-    generate_art("part2.png")
+    generate_art("part2_15.png")
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
