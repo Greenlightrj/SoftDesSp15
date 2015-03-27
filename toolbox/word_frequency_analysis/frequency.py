@@ -40,7 +40,7 @@ def get_top_n_words(word_list, n=100):
             n: the number of words to return
             returns: a list of n most frequently occurring words ordered from most
                              frequently to least frequentlyoccurring
-            also nicely prints the list and the number of occurrences of each.
+            also nicely prints the list and the number of occurrences of each word.
     """
     wordfreq = {}
     for word in word_list:
