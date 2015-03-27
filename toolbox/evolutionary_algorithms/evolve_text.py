@@ -91,6 +91,21 @@ class Message(list):
 #-----------------------------------------------------------------------------
 # Genetic operators
 #-----------------------------------------------------------------------------
+levenresults = {}
+def levenshtein_distance(s1, s2):
+    if len(s1) == 0:
+        #print s2, 's2'
+        return len(s2)
+
+    if len(s2) == 0:
+        #print s1, 's1'
+        return len(s1)
+
+    if s1 not in levenresults:
+        levenresults[s1] = min([int(s1[0] != s2[0]) + levenshtein_distance(s1[1:],s2[1:]), 1+levenshtein_distance(s1[1:],s2), 1+levenshtein_distance(s1,s2[1:])])
+
+    return levenresults[s1]
+
 
 # TODO: Implement levenshtein_distance function (see Day 9 in-class exercises)
 # HINT: Now would be a great time to implement memoization if you haven't
@@ -119,18 +134,53 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
         Substitution:   Replace one character of the Message with a random
                         (legal) character
     """
-
+    #if len(message) < 2:
+    #    return (message, )
+        
     if random.random() < prob_ins:
-        # TODO: Implement insertion-type mutation
-        pass
+        message.insert(random.randint(0,len(message)), random.choice(VALID_CHARS))
 
-    # TODO: Also implement deletion and substitution mutations
-    # HINT: Message objects inherit from list, so they also inherit
-    #       useful list methods
-    # HINT: You probably want to use the VALID_CHARS global variable
+    if random.random() < prob_del:
+        del message[random.randint(0,len(message)-1)]
+
+    if random.random() < prob_sub:
+        message[random.randint(0,len(message)-1)] = random.choice(VALID_CHARS)
 
     return (message, )   # Length 1 tuple, required by DEAP
 
+
+def mate_text(message1, message2):
+    maxlen = len(message1)-1
+    longer = 0
+    baby = Message()
+    baby2 = Message()
+    if len(message1) > len(message2):
+        maxlen = len(message2)-1
+        longer = 1
+    elif len(message2) > len(message1):
+        maxlen = len(message1)-1
+        longer = 2
+    for i in range(0, maxlen):
+        if random.randint(0, 1):
+            baby.append(message1[i])
+        else:
+            baby.append(message2[i])
+        if random.randint(0, 1):
+            baby2.append(message1[i])
+        else:
+            baby2.append(message2[i])
+    if longer == 1 and random.randint(0, 1):
+        if random.randint(0, 1):
+            baby.append(message1[-1])
+        if random.randint(0, 1):
+            baby2.append(message1[-1])
+    elif longer == 2 and random.randint(0,1):
+        if random.randint (0, 1):
+            baby.append(message2[-1])
+        if random.randint(0, 1):
+            baby2.append(message2[-1])
+    return (baby, baby2)
+    
 
 #-----------------------------------------------------------------------------
 # DEAP Toolbox and Algorithm setup
@@ -149,7 +199,7 @@ def get_toolbox(text):
 
     # Genetic operators
     toolbox.register("evaluate", evaluate_text, goal_text=text)
-    toolbox.register("mate", tools.cxTwoPoint)
+    toolbox.register("mate", mate_text)
     toolbox.register("mutate", mutate_text)
     toolbox.register("select", tools.selTournament, tournsize=3)
 
@@ -202,7 +252,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         # Default goal of the evolutionary algorithm if not specified.
         # Pretty much the opposite of http://xkcd.com/534
-        goal = "SKYNET IS NOW ONLINE"
+        goal = "HULLO"
     else:
         goal = " ".join(sys.argv[1:])
 
