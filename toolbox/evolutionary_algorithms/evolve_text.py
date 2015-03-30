@@ -85,7 +85,13 @@ class Message(list):
 
     def get_text(self):
         """Return Message as string (rather than actual list of characters)"""
-        return "".join(self)
+        # text = ''
+        # for letter in self:
+        #    text += str(letter)
+        # return text
+        str_text = "".join(self)
+        return str_text
+
 
 
 #-----------------------------------------------------------------------------
@@ -136,14 +142,27 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
     """
     
     if random.random() < prob_ins:
-        message.insert(random.randint(0,len(message)), random.choice(VALID_CHARS))
+        print "ins"
+        message.insert(random.randint(0,len(message)-1), random.choice(VALID_CHARS))
+        # for i in message:
+        #     if type(i) is list:
+        #         print type(i), message
 
     if random.random() < prob_del:
+        print "del"
         del message[random.randint(0,len(message)-1)]
+        # for i in message:
+        #     if type(i) is list:
+        #         print type(i), message
 
     if random.random() < prob_sub:
-        message[random.randint(0,len(message)-1)] = random.choice(VALID_CHARS)
+        print "sub"
+        message[random.randint(0, len(message)-1)] = random.choice(VALID_CHARS)
+        # for i in message:
+        #     if type(i) is list:
+        #         print type(i), message
 
+    print "message end"
     return (message, )   # Length 1 tuple, required by DEAP
 
 
