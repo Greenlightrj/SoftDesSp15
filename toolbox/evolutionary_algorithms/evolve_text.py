@@ -144,9 +144,9 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
     if random.random() < prob_ins:
         print "ins"
         message.insert(random.randint(0,len(message)-1), random.choice(VALID_CHARS))
-        # for i in message:
-        #     if type(i) is list:
-        #         print type(i), message
+        print type(message)
+        for i in message:
+            print type(i)
 
     if random.random() < prob_del:
         print "del"
