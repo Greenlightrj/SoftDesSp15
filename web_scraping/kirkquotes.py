@@ -33,6 +33,7 @@ def get_quotes():
     quotes2 = []
     quotes3 = []
     quote = False
+    #try to avoid things like the last 4 lines. Its stylistically a pretty poor choice because distinguishing between quote, quotes, quotes2, and quotes3 isn't easy.
     current = ''
 
     i = 0
@@ -91,7 +92,7 @@ def graph(list1):
 
 
 if __name__ == "__main__":
-    # get_html()
+    get_html()
     data = get_quotes()
     kirk = data['Kirk']
     graph(kirk)

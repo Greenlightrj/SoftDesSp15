@@ -14,6 +14,7 @@ def get_html():
     """
     Connects to IMDB to obtain Spock quotes and saves the HTML result in a file locally
     """
+#it'd be nice to allow for the url to passed in here to make your code more composable
     imdbhtml = URL('http://www.imdb.com/character/ch0001439/quotes').download()
     imdbfile = open('imdbfile', 'w')
     imdbfile.write(imdbhtml)
@@ -28,6 +29,7 @@ def get_quotes():
     those from Spock in all other continuities (played by Leonard Nimoy), and a small selection of 
     those from Kirk for comparison.
     """
+#yep, data scraping really sucks and is hard to do. This is quite a complex and fragile function, but I can't think of anything better, either, beyond fighting beautifulsoup to get it to work.
     with open('imdbfile', 'r') as myfile:
         imdbhtml = myfile.read()
 
@@ -97,6 +99,7 @@ def get_quotes():
     while i <= len(imdbhtml) - 1:
         # makes a list of kirk quotes
         character = imdbhtml[i]
+        #you should explain where these numbers came from in the code or have a comment about this somewhere. Why 52,55,45, etc.
         if imdbhtml[i:i + 52] == '<i><a href="/name/nm1517976/">James T. Kirk</a></i>:':
             quote3 = True
             quotes3.append(current)
@@ -132,6 +135,7 @@ def graph(list1, list2, list3):
     Takes input in the form of three lists of strings one to several sentences in length,
     and graphs each on the axes of sentiment and subjectivity.
     """
+    #repetition here, write another function!
     for element in list1:
         sens = sentiment(element)
         plt.plot([sens[0]], [sens[1]], 'go')
@@ -151,6 +155,7 @@ def graph(list1, list2, list3):
 
 
 if __name__ == "__main__":
+#don't repeat yourself! your other python program does almost the same thing but just scrapes a page for a different character. A better software design decision was to make the character page to scrape be an argument and to just call that function two times.
     #get_html()
     data = get_quotes()
     old = data['OldSpock']
