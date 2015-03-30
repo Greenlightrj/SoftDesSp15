@@ -101,10 +101,10 @@ def levenshtein_distance(s1, s2):
         #print s1, 's1'
         return len(s1)
 
-    if s1 not in levenresults:
-        levenresults[s1] = min([int(s1[0] != s2[0]) + levenshtein_distance(s1[1:],s2[1:]), 1+levenshtein_distance(s1[1:],s2), 1+levenshtein_distance(s1,s2[1:])])
+    if (s1, s2) not in levenresults:
+        levenresults[(s1, s2)] = min([int(s1[0] != s2[0]) + levenshtein_distance(s1[1:],s2[1:]), 1+levenshtein_distance(s1[1:],s2), 1+levenshtein_distance(s1,s2[1:])])
 
-    return levenresults[s1]
+    return levenresults[(s1, s2)]
 
 
 # TODO: Implement levenshtein_distance function (see Day 9 in-class exercises)
@@ -134,9 +134,7 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
         Substitution:   Replace one character of the Message with a random
                         (legal) character
     """
-    #if len(message) < 2:
-    #    return (message, )
-        
+    
     if random.random() < prob_ins:
         message.insert(random.randint(0,len(message)), random.choice(VALID_CHARS))
 
@@ -150,36 +148,16 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
 
 
 def mate_text(message1, message2):
-    maxlen = len(message1)-1
-    longer = 0
-    baby = Message()
+    """
+    returns two shuffled recombinations of the input messages
+    """
+    l = len(message1) + len(message2)
+    bab = message1 + message2
+    baby1 = Message()
     baby2 = Message()
-    if len(message1) > len(message2):
-        maxlen = len(message2)-1
-        longer = 1
-    elif len(message2) > len(message1):
-        maxlen = len(message1)-1
-        longer = 2
-    for i in range(0, maxlen):
-        if random.randint(0, 1):
-            baby.append(message1[i])
-        else:
-            baby.append(message2[i])
-        if random.randint(0, 1):
-            baby2.append(message1[i])
-        else:
-            baby2.append(message2[i])
-    if longer == 1 and random.randint(0, 1):
-        if random.randint(0, 1):
-            baby.append(message1[-1])
-        if random.randint(0, 1):
-            baby2.append(message1[-1])
-    elif longer == 2 and random.randint(0,1):
-        if random.randint (0, 1):
-            baby.append(message2[-1])
-        if random.randint(0, 1):
-            baby2.append(message2[-1])
-    return (baby, baby2)
+    baby1.append(bab[0: l/2])
+    baby2.append(bab[l/2: l])
+    return (baby1, baby2)
     
 
 #-----------------------------------------------------------------------------
