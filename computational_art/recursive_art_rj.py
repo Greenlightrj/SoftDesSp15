@@ -20,6 +20,9 @@ def build_random_function(min_depth, max_depth):
 
     if max_depth == 0:
         depth = min_depth
+        #probably would have made sense to more directly just 
+        #return[random.choice(functions), ["xend"], ["yend"]] here
+        #instead of settings value that determines what you return later
     else:
         depth = random.randrange(min_depth, max_depth)
 
@@ -28,6 +31,7 @@ def build_random_function(min_depth, max_depth):
 
     if min_depth > 1:
         return [random.choice(functions), build_random_function(depth-1, 0), build_random_function(depth-1, 0)]
+        #like we talked about, it would have been nice if you made it so that sin and cos took one argument, but the assignment wasn't too clear.
     elif min_depth <= 1:
         return[random.choice(functions), ["xend"], ["yend"]]
 
@@ -71,6 +75,7 @@ def evaluate_random_function(f, x, y):
         #print b,
         #print 'b'
 
+    #could have put the if elif statement w/ the rest of these if elif statments. Do you see why? f[0] would have given you 'xend' and 'yend'.
     if insidefunc == "x":
         return a
     elif insidefunc == "y":
@@ -177,6 +182,8 @@ def generate_art(filename, x_size=350, y_size=350):
     
     for i in range(x_size):
         for j in range(y_size):
+            print i
+            print j
             x = remap_interval(i, 0, x_size, -1, 1)
             y = remap_interval(j, 0, y_size, -1, 1)
             pixels[i, j] = (
