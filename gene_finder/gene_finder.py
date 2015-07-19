@@ -39,6 +39,7 @@ def get_complement(nucleotide):
     >>> get_complement('echidna')
     echidna is not a nucleotide
     """
+    #now that you know about dictionaries you could use one instead in the future!
     if nucleotide == 'A':
         return 'T'
     elif nucleotide == 'T':
@@ -48,6 +49,7 @@ def get_complement(nucleotide):
     elif nucleotide == 'G':
         return 'C'
     else:
+        #good thought. If you want the program to halt execution if get_complement does not get an expected input, you could raise ValueError('give me a nucleotide, dummy!'). That way, you can force users to give you the right input.
         print nucleotide + ' is not a nucleotide'
 
 
@@ -96,6 +98,7 @@ def rest_of_ORF(dna):
     >>> rest_of_ORF("TAG")
     ''
     """
+    #it'd be nice to have a test to make sure that you aren't getting nested ORFS
     orf = ''
     for i in range(0, 1+len(dna)//3):
         if dna[3*i: 3*i+3] in ('TAG', 'TAA', 'TGA'):
@@ -104,6 +107,11 @@ def rest_of_ORF(dna):
             orf += dna[3*i:len(dna)]
         else:
             orf += dna[3*i: 3*i+3]
+    #Another way of doing this is as follows
+    # for i in range(0,len(dna)//3,3):
+    #   if dna[i:i+3] in stopcodons:
+    #       return dna[:i]
+    # return dna
     return orf
 
 
@@ -123,7 +131,6 @@ def find_all_ORFs_oneframe(dna):
     ['ATGCATGAATGTAGA', 'ATGTGCCC']
     >>> find_all_ORFs_oneframe("ATGCGGATGTCCTAAATGTGAATGGGGTAG")
     ['ATGCGGATGTCC', 'ATG', 'ATGGGG']
-
     """
     i = 0
     orfs = []
@@ -153,6 +160,7 @@ def find_all_ORFs(dna):
         result = (find_all_ORFs_oneframe(dna[i:len(dna)]))
         for i in range (0, len(result)):
             orfs.append(result.pop(0))
+        #could use orfs += result here instead of appending and popping with a loop.
     return orfs
 
 
@@ -171,7 +179,7 @@ def find_all_ORFs_both_strands(dna):
     firstorfs = find_all_ORFs(dna)
     secondorfs = find_all_ORFs(otherstrand)
     for i in range(0, len(firstorfs)):
-        orfs.append(firstorfs.pop(0))
+        orfs.append(firstorfs.pop(0)) #use orfs += firstorfs!
     for i in range(0, len(secondorfs)):
         orfs.append(secondorfs.pop(0))
     return orfs
@@ -201,7 +209,7 @@ def longest_ORF(dna):
     if len(allorfs)>0:
         return allorfs.pop(0)
     else:
-        return ''
+        return '' #nice
 
 
 def longest_ORF_noncoding(dna, num_trials):
@@ -217,9 +225,9 @@ def longest_ORF_noncoding(dna, num_trials):
     for i in range(1, num_trials):
         shuffled=shuffle_string(dna)
         longests.append(longest_ORF(shuffled))
-    longests = sorted(longests, key=len)
-    longests.reverse()
-    return len(longests.pop(0))
+    longests = sorted(longests, key=len) #a max function exists to do something similar, for future reference.
+    longests.reverse() #sorted takes an argument reverse=True to do this.
+    return len(longests.pop(0)) #I'd recommend getting out of the habit of using pop when you could just index longests[0]. It's best not to pop and change the state of the list unless you intend to shorten the list instead of just looking at an element.
 
 
 def coding_strand_to_AA(dna):
@@ -247,7 +255,6 @@ def coding_strand_to_AA(dna):
 
 
 def gene_finder(dna):
-<<<<<<< HEAD
     """ Returns the amino acid sequences coded by all genes that have an ORF
         larger than the specified threshold.
 
@@ -259,21 +266,15 @@ def gene_finder(dna):
         this unit test just checks that the function is working for a reasonable input
         >>> gene_finder('ATGCCGATCAAACATCACGCGCGCGGGCTCGTGCACGAGTAG')
         []
-=======
-    """ Returns the amino acid sequences that are likely coded by the specified dna
-        
-        dna: a DNA sequence
-        returns: a list of all amino acid sequences coded by the sequence dna.
->>>>>>> 922a6e32441860ab0413630f74531e6e47a16a7c
     """
-    threshold = longest_ORF_noncoding(dna, 1500)
+    threshold = longest_ORF_noncoding(dna,1500)
     orfs = find_all_ORFs_both_strands(dna)
     longorfs = []
     proteins = []
     for element in orfs:
         if len(element) >= threshold:
             longorfs.append(element)
-        else:
+        else:   #this else: pass statement is not needed, it's implicitly happening.
             pass
     for element in longorfs:
         proteins.append(coding_strand_to_AA(element))
